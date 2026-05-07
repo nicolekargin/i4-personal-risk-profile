@@ -1,0 +1,13 @@
+data/raw/*.csv
+data/raw/*.h5ad
+data/raw/*.h5
+data/raw/*.gz
+data/processed/*.json
+*.pyc
+__pycache__/
+.ipynb_checkpoints/
+*.egg-info/
+dist/
+build/
+.env
+.DS_Store

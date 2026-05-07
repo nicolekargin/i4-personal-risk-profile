@@ -73,3 +73,31 @@ choice either sharpens that question or honestly represents its limitations.
 - **Cardiovascular panel (DS06)**: CRP and AGP are in `OSD-575_eve_cardiovascular_*` and
   would be natural additions to the inflammatory narrative.  CRP has built-in reference
   ranges and would complement the CBC clinical flags.
+
+---
+
+## Th2-Skew Hypothesis Test — Pre-registered Thresholds
+
+The following thresholds are **pre-registered** and must not be adjusted after seeing results.
+
+| Parameter | Value | Rationale |
+|---|---|---|
+| `_FOLD_THRESHOLD` | 2.0 | C003's archetype activation score must be ≥ 2× the cohort median to claim preferential elevation. The 2× bound is conservative enough to survive peer challenge while meaningful given n=4. |
+| `_ACUTE_SD_THRESHOLD` | 1.0 | C003's acute-phase score must be within 1 SD of the cohort mean to qualify as "shared signal." 1 SD is the standard "no remarkable difference" bound for a single data point relative to a 3-person reference. |
+| `_MIN_ROBUST_MEMBERS` | 2 | Minimum number of `both-elevated` archetype members before a score is computed. A score based on a single measurement is not interpretable as an archetype-level claim. |
+
+**Decision tree (pre-registered):**
+- 6/6 or ≥5.5 effective → "strongly supported"
+- ≥4.5 effective → "supported with one exception"
+- ≥3.5 effective → "partially supported"
+- <3.5 → "not supported"
+
+Where effective = n_supported + 0.5 × n_mixed.
+
+**Matching logic:** The cohort archetype synthesis uses `_strict_match` (exact canonical or underscore-stripped equality only) rather than the broader `_fuzzy_match` from `archetype.py`. The `_fuzzy_match` startswith step produces false positives (e.g., `il22` matches `il2`) that corrupt archetype boundary integrity. The known combined analyte `il_17e_il_25` and subunit measurements `il_12p40`, `il_12p70` are handled via explicit aliases in `_MEASUREMENT_OVERRIDES`.
+
+**Both-elevated filter:** The cohort comparison uses only `methods_concordance = 'both-elevated'` rows for each crew member independently. This ensures that each crew member's archetype score reflects measurements where both the mean+SD and robust (median+MAD) pipelines confirm the deviation — preventing spurious archetype claims from measurements with high mean+SD z-scores but unstable baselines.
+
+**Verdict:** NOT SUPPORTED (1/6 supported, 4/6 mixed, 1/6 not supported; effective = 3.0). The primary driver is the `both-elevated` filter leaving most archetypes below the 2-member minimum for most crew members. This reflects the strict robustness requirement applied to n=3 baseline data, not a falsification of the hypothesis — the data are underpowered for it at this stringency. The direction of evidence (C003 is the only crew member with ≥2 both-elevated Th2 members; C003's Th1 has zero both-elevated members) is consistent with Th2-skew but insufficient to confirm it by the pre-registered criteria.
+
+**Implications for narrative:** The framing sentence reverts to descriptive language: "Subject C003 exhibits a broad idiosyncratic immune activation pattern that does not cleanly match a classical polarization archetype."  The Th2-skew hypothesis remains an open question for higher-powered follow-up (n>4 cohort, or lower MAD-threshold for `both-elevated` classification).

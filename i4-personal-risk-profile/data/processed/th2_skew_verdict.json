@@ -1,0 +1,16 @@
+{
+  "verdict": "not supported",
+  "n_supported": 1,
+  "n_mixed": 4,
+  "n_total": 6,
+  "effective_support": 3.0,
+  "framing_sentence": "Subject C003 exhibits a broad idiosyncratic immune activation pattern that does not cleanly match a classical polarization archetype.",
+  "caveat": "Only 1/6 predictions supported (threshold: \u22654).",
+  "failed_predictions": [
+    1,
+    2,
+    3,
+    5,
+    6
+  ]
+}

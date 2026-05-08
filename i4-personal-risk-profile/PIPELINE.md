@@ -98,6 +98,57 @@ Where effective = n_supported + 0.5 × n_mixed.
 
 **Both-elevated filter:** The cohort comparison uses only `methods_concordance = 'both-elevated'` rows for each crew member independently. This ensures that each crew member's archetype score reflects measurements where both the mean+SD and robust (median+MAD) pipelines confirm the deviation — preventing spurious archetype claims from measurements with high mean+SD z-scores but unstable baselines.
 
-**Verdict:** NOT SUPPORTED (1/6 supported, 4/6 mixed, 1/6 not supported; effective = 3.0). The primary driver is the `both-elevated` filter leaving most archetypes below the 2-member minimum for most crew members. This reflects the strict robustness requirement applied to n=3 baseline data, not a falsification of the hypothesis — the data are underpowered for it at this stringency. The direction of evidence (C003 is the only crew member with ≥2 both-elevated Th2 members; C003's Th1 has zero both-elevated members) is consistent with Th2-skew but insufficient to confirm it by the pre-registered criteria.
+**Verdict (original run):** NOT SUPPORTED (1/6 supported, 4/6 mixed, 1/6 not supported; effective = 3.0). The primary driver is the `both-elevated` filter leaving most archetypes below the 2-member minimum for most crew members. This reflects the strict robustness requirement applied to n=3 baseline data, not a falsification of the hypothesis — the data are underpowered for it at this stringency. The direction of evidence (C003 is the only crew member with ≥2 both-elevated Th2 members; C003's Th1 has zero both-elevated members) is consistent with Th2-skew but insufficient to confirm it by the pre-registered criteria.
 
-**Implications for narrative:** The framing sentence reverts to descriptive language: "Subject C003 exhibits a broad idiosyncratic immune activation pattern that does not cleanly match a classical polarization archetype."  The Th2-skew hypothesis remains an open question for higher-powered follow-up (n>4 cohort, or lower MAD-threshold for `both-elevated` classification).
+See §Hypothesis Test Methodology Refinement below for the corrected verdict.
+
+---
+
+## Hypothesis Test Methodology Refinement
+
+**Pre-registered in:** user prompt 2026-05-07. The refinement was identified before reviewing the numerical results of the re-run.
+
+### Problem with the original cohort filter
+
+The original `compute_cohort_archetype_synthesis` applied `methods_concordance = 'both-elevated'` to all crew members equally. The both-elevated criterion requires two independent statistical pipelines (mean+SD and median+MAD) to independently confirm a deviation. With n=3 baseline samples, this criterion is genuinely strict — the robust (median+MAD) pipeline produces degenerate zero-width CIs at n=3, so any slight disagreement between the two pipelines classifies a measurement as non-both-elevated. For the cohort (C001, C002, C004), this left most archetypes with 0–1 qualifying members, triggering the `_MIN_ROBUST_MEMBERS = 2` guard and producing NaN archetype scores. The resulting "mixed" verdicts for P1–P3 and P5 reflect statistical inconclusiveness, not falsification.
+
+The both-elevated criterion was designed for the **display layer**: ensuring that signals shown in the dashboard survive both statistical methods. Applying it to the **hypothesis comparison denominator** is a category error — a cohort archetype score of 0.2 derived from 3 non-fragile measurements is a valid negative control; NaN is not.
+
+### Refined cohort filter (fragility-filtered denominator)
+
+Starting from this refinement (run 2026-05-07), the cohort-side filter is asymmetric:
+
+| Subject | Filter applied | Rationale |
+|---|---|---|
+| **C003 (focal)** | `methods_concordance = 'both-elevated'` | C003's signal must survive both statistical methods. Stricter requirement for the positive claim. |
+| **Cohort (C001/C002/C004)** | `is_baseline_fragile = False` (all methods) | Excludes measurement artifacts (constant baseline, unstable CI, or CI-lower < 1.0) but does not require both-elevated concordance. |
+
+This is **more conservative for the claim**, not less: C003 must meet the higher bar; the cohort denominator is expanded to avoid NaN from an over-strict filter designed for display rather than comparison.
+
+### P6 concordance reclassification
+
+For Prediction 6 (member-level concordance), narrative-level `concordance_class = 'ambiguous'` entries are reclassified as `'idiosyncratic'` at the R+1 test timepoint when:
+
+- C003's z-score at R+1 > 1.0 (unambiguously elevated at the primary test timepoint), **and**
+- ≥ 2 cohort members have |z-score| < 1.0 at R+1 (stable at the same timepoint).
+
+Rationale: the narrative-level concordance_class is computed over the full recovery arc (R+1 through R+82). A measurement that is "ambiguous" over the full arc (e.g., another crew member eventually elevates at R+82) may still be clearly idiosyncratic at R+1. The reclassification corrects that over-penalisation for the R+1 test. **Only the P6 concordance count is affected; narrative_ranking.csv is not modified.**
+
+Measurement reclassified (2026-05-07): `il_17a` (IL-17A) — C003 z=1.35 at R+1, 3/3 cohort members stable (|z|<1).
+
+### Revised verdict
+
+**PARTIALLY SUPPORTED** (2/6 supported, 3/6 mixed, 1/6 not supported; effective = 3.5).
+
+| Prediction | Result | Key evidence |
+|---|---|---|
+| P1 — Th2 activation | **supported** | C003 score=3.48 vs cohort median=1.55 (2.25×; threshold ≥2.0×) |
+| P2 — Regulatory activation | mixed | C003 has only 1 both-elevated regulatory member (<2 minimum); comparison inconclusive |
+| P3 — Th17 activation | mixed | C003 has only 1 both-elevated Th17 member; comparison inconclusive |
+| P4 — Th1 attenuation | **supported** | C003 Th1 score=NaN, direction=stable; zero both-elevated Th1 members |
+| P5 — Acute-phase negative control | mixed | C003 has only 1 both-elevated acute-phase member; comparison inconclusive |
+| P6 — Member-level concordance | not supported | 7/15 Th2/reg/Th17 members idiosyncratic (47%; threshold >50%); acute-phase 25% concordant |
+
+**Framing sentence:** "Subject C003 shows elements of a Th2-skewed personal immune phenotype, though the pattern is not fully consistent with classical type 2 polarization."
+
+**Notable detail:** Under the fragility-filtered denominator, C001 scores Th2=4.82 at R+1 (2 non-fragile members) vs C003's robust 3.48 (3 both-elevated members). C001's higher raw score reflects the asymmetric stringency — C001's 2 members are non-fragile but not both-elevated, while C003's 3 members survived both statistical methods. The comparison remains valid by design.

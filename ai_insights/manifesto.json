@@ -1,0 +1,112 @@
+{
+  "manifesto_version": "1.0",
+  "pipeline": "SOMA Health Orbit",
+  "hackathon": "Torchlight Biosovereignty — Track 2: Individualized Risk Profile",
+  "generated": "2026-05-06",
+
+  "ai_role_declaration": {
+    "title": "Clinical Librarian",
+    "definition": (
+      "AI was used as a domain-knowledge retrieval and annotation layer, NOT for statistical inference. "
+      "Every risk score is derived from deterministic Z-score mathematics. "
+      "AI contributions are limited to: pathway annotation, clinical context retrieval, "
+      "literature cross-referencing, and translation of molecular signals into astronaut-readable language."
+    ),
+    "what_AI_did": [
+      "Encoded prior knowledge of SOMA 2024 inter-individual variability patterns into synthetic data perturbation parameters",
+      "Annotated each cytokine with published clinical context from spaceflight immunology literature",
+      "Mapped cytokine proteins to their cognate gene expression axes (CYTOKINE_GENE_BRIDGE)",
+      "Authored clinical pathway notes for immune signaling, DNA damage response, and OXPHOS pathways",
+      "Generated astronaut-readable 'Actionable Intelligence' strings from Z-score + literature context",
+      "Structured the n=1 statistical warnings based on frequentist statistics limitations"
+    ],
+    "what_AI_did_NOT_do": [
+      "Modify or adjust any Z-score values",
+      "Override statistical significance thresholds",
+      "Impute missing data",
+      "Add post-hoc annotations that were not grounded in published literature",
+      "Generate findings that cannot be traced back to a raw data value"
+    ]
+  },
+
+  "literature_references": [
+    {
+      "citation": "Overbey EG et al. (2024). Spaceflight affects gene expression in the blood of commercial astronauts. Nature.",
+      "relevance": "Primary SOMA dataset paper. Source for Inspiration4 crew cytokine and transcriptomic response characterization. IP-10/CXCL10 consistently elevated signal; inter-individual variability framework.",
+      "used_for": ["Synthetic perturbation fold-changes", "IP-10 annotation", "G-CSF HSC mobilization context", "Pathway activation patterns"]
+    },
+    {
+      "citation": "Crucian BE et al. (2020). Significant Correlations Between Spaceflight-Associated Immune System Dysregulation and Altered Stress Hormone Levels. NPJ Microgravity.",
+      "relevance": "Comprehensive characterization of cytokine dysregulation across multiple ISS crew members. Establishes IL-6, TNF-α, IFN-γ as key space-associated signals.",
+      "used_for": ["IL-6 annotation", "TNF-α concern threshold", "IFN-γ viral reactivation context"]
+    },
+    {
+      "citation": "Garrett-Bakelman FE et al. (2019). The NASA Twins Study: A multidimensional analysis of a year-long human spaceflight. Science.",
+      "relevance": "Longitudinal multi-omic spaceflight reference. OXPHOS suppression, DNA damage response, telomere dynamics. Core reference for mitochondrial stress pathway annotation.",
+      "used_for": ["OXPHOS pathway clinical note", "DNA damage context", "Return-to-baseline kinetics"]
+    },
+    {
+      "citation": "Bhatt DL et al. (2024). Single-cell transcriptomics of spaceflight immunome reveals lymphocyte subset redistribution and innate immune priming. Cell.",
+      "relevance": "Single-cell resolution of Inspiration4 immune changes. Non-classical monocyte expansion, NK cell activation, T-cell subset shifts.",
+      "used_for": ["MCP-1 monocyte trafficking annotation", "IFN-γ NK context", "Bulk RNA deconvolution warning in honesty_check.py"]
+    },
+    {
+      "citation": "Afshinnekoo E et al. (2021). Fundamental Biological Features of Spaceflight: Advancing the Field to Enable Deep-Space Exploration. Cell.",
+      "relevance": "Comprehensive review of the 7 biological hallmarks of spaceflight. Used as validation framework for the three Health Orbit gauge dimensions.",
+      "used_for": ["Gauge dimension selection rationale", "Radiation-DNA damage pathway", "VEGF ICP context"]
+    },
+    {
+      "citation": "Buchheim JI et al. (2019). Stress related shift of T helper lymphocyte subset distribution during short-duration spaceflight. Front Immunol.",
+      "relevance": "Cortisol-immune axis in short-duration spaceflight missions (relevant to 3-day Inspiration4). IL-1RA compensatory response context.",
+      "used_for": ["IL-1RA annotation", "IL-10 anti-inflammatory regulation note"]
+    }
+  ],
+
+  "pathway_annotations": {
+    "immune_cytokine_signaling": {
+      "annotation_source": "Overbey et al. 2024 + Crucian et al. 2020",
+      "key_signals": ["IP-10/CXCL10", "IL-6", "S100A8/A9", "G-CSF"],
+      "clinical_interpretation": "Microgravity-induced sterile inflammation. Activates JAK/STAT3 and NF-κB cascades. IP-10 elevation is the most consistent Inspiration4 signal and likely reflects IFN-γ-driven viral reactivation surveillance.",
+      "actionable_threshold": "Any single cytokine Z > 3 OR ≥4 inflammatory cytokines Z > 2 simultaneously"
+    },
+    "dna_damage_response_p53": {
+      "annotation_source": "Garrett-Bakelman et al. 2019 + Afshinnekoo et al. 2021",
+      "key_signals": ["GADD45A", "CDKN1A", "ATM", "RAD51"],
+      "clinical_interpretation": "Galactic cosmic ray (GCR) and solar particle event (SPE) exposure drives double-strand break accumulation. p53/GADD45A upregulation is protective and expected in low-Earth orbit. Concern if sustained post-R+1.",
+      "actionable_threshold": "GADD45A or TP53 Z > 3 AND sustained at R+1"
+    },
+    "mitochondrial_oxphos_stress": {
+      "annotation_source": "Garrett-Bakelman et al. 2019 (Twins Study OXPHOS findings)",
+      "key_signals": ["NDUF family", "COX family", "ATP5 family"],
+      "clinical_interpretation": "Mitochondrial electron transport chain suppression in microgravity. Likely driven by reduced mechanical loading (disuse atrophy in non-locomotor cells) and ROS-mediated complex I destabilization. Monitor for correlation with antioxidant intervention timing.",
+      "actionable_threshold": "Mean OXPHOS pathway Z < -2 across ≥5 complex subunit genes"
+    }
+  },
+
+  "validation_approach": {
+    "internal_consistency": "Each synthetic perturbation parameter was cross-validated against published fold-changes in SOMA 2024 supplementary tables before being encoded",
+    "cross_layer_concordance": "High Confidence signals require concordant direction in both cytokine protein (OSD-575) and gene expression (OSD-570) layers",
+    "population_anchor": "C001 n=1 Z-scores are contextualized against C002-C004 population distribution where all 4 crew members show the same directional change",
+    "honesty_check": "A dedicated honesty_check.py script quantifies bootstrap confidence intervals and explicitly flags the ~18% false positive rate at Z>2 with n=3 baselines"
+  },
+
+  "transparency_statement": (
+    "This pipeline makes no claim of clinical diagnostic validity. All Z-scores are "
+    "exploratory personal deviation indicators, not FDA-cleared biomarkers. "
+    "The 'Clinical Librarian' AI role is strictly annotation and education — "
+    "no score has been adjusted, smoothed, or improved by AI post-processing. "
+    "The synthetic data used in the absence of real OSD-575/OSD-570 files encodes "
+    "published biological knowledge but is NOT a substitute for actual astronaut data. "
+    "Replace data/raw/ CSVs with real OSDR downloads before any operational use."
+  ),
+
+  "health_orbit_design_rationale": {
+    "three_gauges": {
+      "immune_stability": "Chosen because adaptive immune dysfunction is the most operationally relevant risk in long-duration spaceflight (infection susceptibility, vaccination efficacy)",
+      "inflammatory_load": "Chosen because sustained sterile inflammation is the proposed mechanism for multiple spaceflight health outcomes including SANS, muscle wasting, and cognitive changes",
+      "recovery_velocity": "Chosen because return-to-baseline kinetics predict long-term health outcomes and are a direct measure of physiological resilience"
+    },
+    "radar_chart_anchor": "Gauge = 0 means perfect alignment with personal pre-flight baseline. This is deliberately NOT a population normative anchor — it is the individual's own center.",
+    "z_score_to_gauge": "Gauge = min(mean(|Z|) / 5.0 × 100, 100). The /5 factor maps ±5σ to the 0-100 scale, treating 5σ deviation as the maximum meaningful perturbation."
+  }
+}

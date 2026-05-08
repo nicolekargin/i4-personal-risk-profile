@@ -1,0 +1,1023 @@
+[
+  {
+    "n": 1,
+    "osd": "OSD-572",
+    "assay": "Metagenomics KEGG KO",
+    "granularity": "sample-level",
+    "aggregated": false,
+    "url": "https://osdr.nasa.gov/geode-py/ws/studies/OSD-572/download?source=datamanager&file=GLDS-564_GMetagenomics_Combined-gene-level-KO-function-coverages_GLmetagenomics.tsv",
+    "shape": [
+      10537,
+      328
+    ],
+    "mem_mb": 29.13,
+    "miss": "0/3456136 (0.0%)",
+    "n_features": 10537,
+    "n_samples": 323,
+    "crews": [
+      "C001",
+      "C002",
+      "C003",
+      "C004"
+    ],
+    "timepoints": [
+      "L-92",
+      "L-44",
+      "L-3",
+      "FD2",
+      "FD3",
+      "R+1",
+      "R+45",
+      "R+82"
+    ],
+    "coverage": {
+      "C001": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "FD2": 1,
+        "FD3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1
+      },
+      "C002": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "FD2": 1,
+        "FD3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1
+      },
+      "C003": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "FD2": 1,
+        "FD3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1
+      },
+      "C004": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "FD2": 1,
+        "FD3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1
+      }
+    },
+    "value_scale": "min=0 med=0 max=1.73e+07 [linear continuous]",
+    "dup_index": 0,
+    "col_examples": [
+      "KO_function",
+      "C001_FD2_ARM",
+      "C001_FD2_EAR",
+      "C001_FD2_GLU",
+      "C001_FD2_NAC"
+    ],
+    "idx_examples": [
+      "K00001",
+      "K00003",
+      "K00004",
+      "K00005",
+      "K00006"
+    ],
+    "per_crew": true,
+    "error": null
+  },
+  {
+    "n": 2,
+    "osd": "OSD-572",
+    "assay": "Metagenomics Taxonomy CPM",
+    "granularity": "sample-level",
+    "aggregated": false,
+    "url": "https://osdr.nasa.gov/geode-py/ws/studies/OSD-572/download?source=datamanager&file=GLDS-564_GMetagenomics_Combined-gene-level-taxonomy-coverages-CPM_GLmetagenomics.tsv",
+    "shape": [
+      18850,
+      334
+    ],
+    "mem_mb": 58.43,
+    "miss": "9066/6295900 (0.1%)",
+    "n_features": 18850,
+    "n_samples": 323,
+    "crews": [
+      "C001",
+      "C002",
+      "C003",
+      "C004"
+    ],
+    "timepoints": [
+      "L-92",
+      "L-44",
+      "L-3",
+      "FD2",
+      "FD3",
+      "R+1",
+      "R+45",
+      "R+82"
+    ],
+    "coverage": {
+      "C001": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "FD2": 1,
+        "FD3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1
+      },
+      "C002": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "FD2": 1,
+        "FD3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1
+      },
+      "C003": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "FD2": 1,
+        "FD3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1
+      },
+      "C004": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "FD2": 1,
+        "FD3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1
+      }
+    },
+    "value_scale": "min=0 med=0 max=1e+06 [CPM-normalized]",
+    "dup_index": 0,
+    "col_examples": [
+      "domain",
+      "phylum",
+      "class",
+      "order",
+      "family"
+    ],
+    "idx_examples": [
+      "10",
+      "100",
+      "1000413",
+      "1000565",
+      "1000566"
+    ],
+    "per_crew": true,
+    "error": null
+  },
+  {
+    "n": 3,
+    "osd": "OSD-575",
+    "assay": "Comprehensive Metabolic Panel",
+    "granularity": "clinical-panel",
+    "aggregated": false,
+    "url": "https://osdr.nasa.gov/geode-py/ws/studies/OSD-575/download?source=datamanager&file=LSDS-8_Comprehensive_Metabolic_Panel_CMP_TRANSFORMED.csv",
+    "shape": [
+      57,
+      28
+    ],
+    "mem_mb": 0.02,
+    "miss": "81/1596 (5.1%)",
+    "n_features": 57,
+    "n_samples": 28,
+    "crews": [
+      "C001",
+      "C002",
+      "C003",
+      "C004"
+    ],
+    "timepoints": [
+      "L-92",
+      "L-44",
+      "L-3",
+      "R+1",
+      "R+45",
+      "R+82",
+      "R+194"
+    ],
+    "coverage": {
+      "C001": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1,
+        "R+194": 1
+      },
+      "C002": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1,
+        "R+194": 1
+      },
+      "C003": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1,
+        "R+194": 1
+      },
+      "C004": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1,
+        "R+194": 1
+      }
+    },
+    "value_scale": "min=0.2 med=10.2 max=153 [linear continuous]",
+    "dup_index": 0,
+    "col_examples": [
+      "C001_serum_L-3",
+      "C001_serum_L-44",
+      "C001_serum_L-92",
+      "C001_serum_R+1",
+      "C001_serum_R+194"
+    ],
+    "idx_examples": [
+      "albumin_value_gram_per_deciliter",
+      "albumin_range_min_gram_per_deciliter",
+      "albumin_range_max_gram_per_deciliter",
+      "albumin_to_globulin_ratio_value",
+      "albumin_to_globulin_ratio_range_min"
+    ],
+    "per_crew": true,
+    "error": null
+  },
+  {
+    "n": 4,
+    "osd": "OSD-575",
+    "assay": "Immune Cytokines Eve",
+    "granularity": "sample-level",
+    "aggregated": false,
+    "url": "https://osdr.nasa.gov/geode-py/ws/studies/OSD-575/download?source=datamanager&file=LSDS-8_Multiplex_serum_immune_EvePanel_TRANSFORMED.csv",
+    "shape": [
+      142,
+      28
+    ],
+    "mem_mb": 0.04,
+    "miss": "0/3976 (0.0%)",
+    "n_features": 142,
+    "n_samples": 28,
+    "crews": [
+      "C001",
+      "C002",
+      "C003",
+      "C004"
+    ],
+    "timepoints": [
+      "L-92",
+      "L-44",
+      "L-3",
+      "R+1",
+      "R+45",
+      "R+82",
+      "R+194"
+    ],
+    "coverage": {
+      "C001": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1,
+        "R+194": 1
+      },
+      "C002": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1,
+        "R+194": 1
+      },
+      "C003": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1,
+        "R+194": 1
+      },
+      "C004": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1,
+        "R+194": 1
+      }
+    },
+    "value_scale": "min=0.0377 med=88.6 max=2.65e+05 [linear continuous]",
+    "dup_index": 0,
+    "col_examples": [
+      "C001_serum_L-3",
+      "C001_serum_L-44",
+      "C001_serum_L-92",
+      "C001_serum_R+1",
+      "C001_serum_R+194"
+    ],
+    "idx_examples": [
+      "6ckine_concentration_picogram_per_milliliter",
+      "6ckine_percent",
+      "bca_1_concentration_picogram_per_milliliter",
+      "bca_1_percent",
+      "ctack_concentration_picogram_per_milliliter"
+    ],
+    "per_crew": true,
+    "error": null
+  },
+  {
+    "n": 5,
+    "osd": "OSD-575",
+    "assay": "Immune Cytokines Alamar NULISAseq",
+    "granularity": "sample-level",
+    "aggregated": false,
+    "url": "https://osdr.nasa.gov/geode-py/ws/studies/OSD-575/download?source=datamanager&file=LSDS-8_Multiplex_serum.immune.AlamarPanel_TRANSFORMED.csv",
+    "shape": [
+      406,
+      27
+    ],
+    "mem_mb": 0.12,
+    "miss": "0/10962 (0.0%)",
+    "n_features": 406,
+    "n_samples": 27,
+    "crews": [
+      "C001",
+      "C002",
+      "C003",
+      "C004"
+    ],
+    "timepoints": [
+      "L-92",
+      "L-44",
+      "L-3",
+      "R+1",
+      "R+45",
+      "R+82",
+      "R+194"
+    ],
+    "coverage": {
+      "C001": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1,
+        "R+194": 1
+      },
+      "C002": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1,
+        "R+194": 1
+      },
+      "C003": {
+        "L-92": 1,
+        "L-44": 0,
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1,
+        "R+194": 1
+      },
+      "C004": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1,
+        "R+194": 1
+      }
+    },
+    "value_scale": "min=0 med=19.6 max=221 [linear continuous]",
+    "dup_index": 0,
+    "col_examples": [
+      "C001_serum_L-92",
+      "C002_serum_L-92",
+      "C003_serum_L-92",
+      "C004_serum_L-92",
+      "C001_serum_L-44"
+    ],
+    "idx_examples": [
+      "activin_a_concentration_npq",
+      "activin_a_percent_normalized_value",
+      "activin_ab_concentration_npq",
+      "activin_ab_percent_normalized_value",
+      "activin_b_concentration_npq"
+    ],
+    "per_crew": true,
+    "error": null
+  },
+  {
+    "n": 6,
+    "osd": "OSD-575",
+    "assay": "Cardiac Cytokines Eve",
+    "granularity": "sample-level",
+    "aggregated": false,
+    "url": "https://osdr.nasa.gov/geode-py/ws/studies/OSD-575/download?source=datamanager&file=LSDS-8_Multiplex_serum_cardiovascular_EvePanel_TRANSFORMED.csv",
+    "error": "HTTPError: 502 Server Error: Bad Gateway for url: https://osdr.nasa.gov/geode-py/ws/studies/OSD-575/download?source=datamanager&file=LSDS-8_Multiplex_serum_cardiovascular_EvePanel_TRANSFORMED.csv",
+    "per_crew": null
+  },
+  {
+    "n": 7,
+    "osd": "OSD-656",
+    "assay": "Urine Inflammation Alamar",
+    "granularity": "sample-level",
+    "aggregated": false,
+    "url": "https://osdr.nasa.gov/geode-py/ws/studies/OSD-656/download?source=datamanager&file=LSDS-64_Multiplex_urine.immune.AlamarPanel_TRANSFORMED.csv",
+    "shape": [
+      22,
+      406
+    ],
+    "mem_mb": 0.07,
+    "miss": "52/8932 (0.6%)",
+    "n_features": 22,
+    "n_samples": 22,
+    "crews": [
+      "C001",
+      "C002",
+      "C003",
+      "C004"
+    ],
+    "timepoints": [
+      "L-92",
+      "L-44",
+      "L-3",
+      "R+1",
+      "R+45",
+      "R+82"
+    ],
+    "coverage": {
+      "C001": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 0,
+        "R+1": 0,
+        "R+45": 1,
+        "R+82": 1
+      },
+      "C002": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1
+      },
+      "C003": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1
+      },
+      "C004": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1
+      }
+    },
+    "value_scale": "min=0 med=17.4 max=inf [linear continuous]",
+    "dup_index": 0,
+    "col_examples": [
+      "activin_a_concentration_npq",
+      "Unnamed: 2",
+      "activin_ab_concentration_npq",
+      "activin_ab_percent_normalized_value",
+      "activin_b_concentration_npq"
+    ],
+    "idx_examples": [
+      "C001_urine_L-92",
+      "C002_urine_L-92",
+      "C003_urine_L-92",
+      "C004_urine_L-92",
+      "C001_urine_L-44"
+    ],
+    "per_crew": true,
+    "error": null
+  },
+  {
+    "n": 8,
+    "osd": "OSD-569",
+    "assay": "Whole Blood RNA-seq long-read",
+    "granularity": "sample-level",
+    "aggregated": false,
+    "url": "https://osdr.nasa.gov/geode-py/ws/studies/OSD-569/download?source=datamanager&file=GLDS-561_long-readRNAseq_Direct_RNA_seq_Gene_Expression_Processed.xlsx",
+    "multiindex_note": "Flattened MultiIndex: [('C001', 'L-92'), ('C001', 'L-44'), ('C001', 'L-3'), ('C001', 'R+1')]",
+    "shape": [
+      61852,
+      38
+    ],
+    "mem_mb": 22.9,
+    "miss": "228597/2350376 (9.7%)",
+    "n_features": 61852,
+    "n_samples": 32,
+    "crews": [
+      "C001",
+      "C002",
+      "C003",
+      "C004"
+    ],
+    "timepoints": [
+      "L-92",
+      "L-44",
+      "L-3",
+      "R+1"
+    ],
+    "coverage": {
+      "C001": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1
+      },
+      "C002": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1
+      },
+      "C003": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1
+      },
+      "C004": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1
+      }
+    },
+    "value_scale": "min=-6.04 med=0 max=1.88e+06 [CPM-normalized]",
+    "dup_index": 0,
+    "col_examples": [
+      "C001 | L-92",
+      "C001 | L-44",
+      "C001 | L-3",
+      "C001 | R+1",
+      "C002 | L-92"
+    ],
+    "idx_examples": [
+      "ENSG00000000003.15",
+      "ENSG00000000005.6",
+      "ENSG00000000419.14",
+      "ENSG00000000457.14",
+      "ENSG00000000460.17"
+    ],
+    "per_crew": true,
+    "error": null
+  },
+  {
+    "n": 9,
+    "osd": "OSD-569",
+    "assay": "Complete Blood Count",
+    "granularity": "clinical-panel",
+    "aggregated": false,
+    "url": "https://osdr.nasa.gov/geode-py/ws/studies/OSD-569/download?source=datamanager&file=LSDS-7_Complete_Blood_Count_CBC.upload_SUBMITTED.csv",
+    "shape": [
+      553,
+      8
+    ],
+    "mem_mb": 0.19,
+    "miss": "0/4424 (0.0%)",
+    "n_features": 23,
+    "n_samples": 4,
+    "crews": [
+      "C001",
+      "C002",
+      "C003",
+      "C004"
+    ],
+    "timepoints": [
+      "L-92",
+      "L-44",
+      "L-3",
+      "R+1",
+      "R+45",
+      "R+82",
+      "R+194"
+    ],
+    "coverage": {
+      "C001": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1,
+        "R+194": 1
+      },
+      "C002": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1,
+        "R+194": 1
+      },
+      "C003": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1,
+        "R+194": 1
+      },
+      "C004": {
+        "L-92": 1,
+        "L-44": 1,
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1,
+        "R+194": 1
+      }
+    },
+    "value_scale": "min=0 med=32 max=7.8e+03 [linear continuous]",
+    "dup_index": 530,
+    "col_examples": [
+      "VALUE",
+      "RANGE_MIN",
+      "RANGE_MAX",
+      "UNITS",
+      "TEST_TYPE"
+    ],
+    "idx_examples": [
+      "WHITE BLOOD CELL COUNT",
+      "RED BLOOD CELL COUNT",
+      "HEMOGLOBIN",
+      "HEMATOCRIT",
+      "MCV"
+    ],
+    "per_crew": true,
+    "error": null
+  },
+  {
+    "n": 10,
+    "osd": "OSD-570",
+    "assay": "PBMC snRNA-seq",
+    "granularity": "differential-stats-only",
+    "aggregated": true,
+    "url": "https://osdr.nasa.gov/geode-py/ws/studies/OSD-570/download?source=datamanager&file=GLDS-562_snRNA-Seq_PBMC_Gene_Expression_snRNA-seq_Processed_Data.xlsx",
+    "shape": [
+      8266,
+      6
+    ],
+    "mem_mb": 1.29,
+    "miss": "0/49596 (0.0%)",
+    "n_features": 8266,
+    "n_samples": 0,
+    "crews": [],
+    "timepoints": [],
+    "coverage": {
+      "C001": {},
+      "C002": {},
+      "C003": {},
+      "C004": {}
+    },
+    "value_scale": "min=-2.68 med=0.187 max=2.95 [linear continuous]",
+    "dup_index": 5689,
+    "col_examples": [
+      "p_val",
+      "avg_log2FC",
+      "pct.1",
+      "pct.2",
+      "p_val_adj"
+    ],
+    "idx_examples": [
+      "PF4",
+      "PPBP",
+      "RPL41",
+      "LYZ",
+      "PLCG2"
+    ],
+    "per_crew": false,
+    "error": null
+  },
+  {
+    "n": 11,
+    "osd": "OSD-570",
+    "assay": "PBMC snATAC-seq",
+    "granularity": "differential-stats-only",
+    "aggregated": true,
+    "url": "https://osdr.nasa.gov/geode-py/ws/studies/OSD-570/download?source=datamanager&file=GLDS-562_snATAC-Seq_PBMC_Chromatin_Accessibility_snATAC-seq_Processed_Data.xlsx",
+    "shape": [
+      20297,
+      6
+    ],
+    "mem_mb": 3.53,
+    "miss": "0/121782 (0.0%)",
+    "n_features": 20297,
+    "n_samples": 0,
+    "crews": [],
+    "timepoints": [],
+    "coverage": {
+      "C001": {},
+      "C002": {},
+      "C003": {},
+      "C004": {}
+    },
+    "value_scale": "min=-0.64 med=0.117 max=1 [linear continuous]",
+    "dup_index": 3359,
+    "col_examples": [
+      "p_val",
+      "avg_log2FC",
+      "pct.1",
+      "pct.2",
+      "p_val_adj"
+    ],
+    "idx_examples": [
+      "chr7-70455925-70457199",
+      "chr10-30284395-30285967",
+      "chr7-95595753-95597173",
+      "chr9-107867976-107868591",
+      "chr14-105836883-105837843"
+    ],
+    "per_crew": false,
+    "error": null
+  },
+  {
+    "n": 12,
+    "osd": "OSD-570",
+    "assay": "T/B cell VDJ profiles",
+    "granularity": "clonotype-level",
+    "aggregated": false,
+    "url": "https://osdr.nasa.gov/geode-py/ws/studies/OSD-570/download?source=datamanager&file=GLDS-562_scRNA-Seq_VDJ_Results.xlsx",
+    "shape": [
+      258138,
+      13
+    ],
+    "mem_mb": 341.4,
+    "miss": "198945/3355794 (5.9%)",
+    "n_features": 258138,
+    "n_samples": 0,
+    "crews": [
+      "C001",
+      "C002",
+      "C003",
+      "C004"
+    ],
+    "timepoints": [
+      "L-3",
+      "R+1",
+      "R+45",
+      "R+82"
+    ],
+    "coverage": {
+      "C001": {
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1
+      },
+      "C002": {
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1
+      },
+      "C003": {
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1
+      },
+      "C004": {
+        "L-3": 1,
+        "R+1": 1,
+        "R+45": 1,
+        "R+82": 1
+      }
+    },
+    "value_scale": "min=0 med=1 max=1.83e+04 [raw counts]",
+    "dup_index": 0,
+    "col_examples": [
+      "SeqName",
+      "SeqLen",
+      "GeneType",
+      "Grouping",
+      "Species"
+    ],
+    "idx_examples": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "per_crew": true,
+    "error": null
+  },
+  {
+    "n": 13,
+    "osd": "OSD-574",
+    "assay": "Skin Biopsy Spatial Transcriptomics",
+    "granularity": "differential-stats-only",
+    "aggregated": true,
+    "url": "https://osdr.nasa.gov/geode-py/ws/studies/OSD-570/download?source=datamanager&file=GLDS-566_SpatialTranscriptomics_Skin_Biopsy_Spatially_Resolved_Transcriptomics_Processed_Data.xlsx",
+    "shape": [
+      2469,
+      6
+    ],
+    "mem_mb": 0.25,
+    "miss": "315/14814 (2.1%)",
+    "n_features": 2469,
+    "n_samples": 0,
+    "crews": [],
+    "timepoints": [],
+    "coverage": {
+      "C001": {},
+      "C002": {},
+      "C003": {},
+      "C004": {}
+    },
+    "value_scale": "min=-5.58 med=0.229 max=583 [linear continuous]",
+    "dup_index": 0,
+    "col_examples": [
+      "baseMean",
+      "log2FoldChange",
+      "lfcSE",
+      "stat",
+      "pvalue"
+    ],
+    "idx_examples": [
+      "DES",
+      "TAGLN",
+      "GSN",
+      "ACTG2",
+      "MYLK"
+    ],
+    "per_crew": false,
+    "error": null
+  },
+  {
+    "n": 14,
+    "osd": "OSD-571",
+    "assay": "Plasma Metabolomics",
+    "granularity": "differential-stats-only",
+    "aggregated": true,
+    "url": "https://osdr.nasa.gov/geode-py/ws/studies/OSD-571/download?source=datamanager&file=GLDS-563_metabolomics_Plasma_Metabolomics_Processed_Data.xlsx",
+    "shape": [
+      656,
+      6
+    ],
+    "mem_mb": 0.07,
+    "miss": "0/3936 (0.0%)",
+    "n_features": 656,
+    "n_samples": 0,
+    "crews": [],
+    "timepoints": [],
+    "coverage": {
+      "C001": {},
+      "C002": {},
+      "C003": {},
+      "C004": {}
+    },
+    "value_scale": "min=-6.72 med=0.000368 max=8.31 [linear continuous]",
+    "dup_index": 1,
+    "col_examples": [
+      "logFC",
+      "AveExpr",
+      "t",
+      "P.Value",
+      "adj.P.Val"
+    ],
+    "idx_examples": [
+      "LysoPC(15:0)",
+      "LysoPC(14:0)",
+      "LysoPC(17:0)",
+      "Inosine",
+      "Sphingosine 1-phosphate"
+    ],
+    "per_crew": false,
+    "error": null
+  },
+  {
+    "n": 15,
+    "osd": "OSD-571",
+    "assay": "Plasma Proteomics",
+    "granularity": "differential-stats-only",
+    "aggregated": true,
+    "url": "https://osdr.nasa.gov/geode-py/ws/studies/OSD-571/download?source=datamanager&file=GLDS-563_proteomics_Plasma_Proteomics_Processed_Data.xlsx",
+    "shape": [
+      1765,
+      6
+    ],
+    "mem_mb": 0.18,
+    "miss": "0/10590 (0.0%)",
+    "n_features": 1765,
+    "n_samples": 0,
+    "crews": [],
+    "timepoints": [],
+    "coverage": {
+      "C001": {},
+      "C002": {},
+      "C003": {},
+      "C004": {}
+    },
+    "value_scale": "min=-6.98 med=0.321 max=24.6 [linear continuous]",
+    "dup_index": 0,
+    "col_examples": [
+      "logFC",
+      "AveExpr",
+      "t",
+      "P.Value",
+      "adj.P.Val"
+    ],
+    "idx_examples": [
+      "PF4",
+      "QPCT",
+      "TGFB1",
+      "APP",
+      "CCN2"
+    ],
+    "per_crew": false,
+    "error": null
+  },
+  {
+    "n": 16,
+    "osd": "OSD-571",
+    "assay": "EVP Proteomics",
+    "granularity": "differential-stats-only",
+    "aggregated": true,
+    "url": "https://osdr.nasa.gov/geode-py/ws/studies/OSD-571/download?source=datamanager&file=GLDS-563_proteomics_EVP_Proteomics_Processed_Data.xlsx",
+    "shape": [
+      527,
+      6
+    ],
+    "mem_mb": 0.05,
+    "miss": "0/3162 (0.0%)",
+    "n_features": 527,
+    "n_samples": 0,
+    "crews": [],
+    "timepoints": [],
+    "coverage": {
+      "C001": {},
+      "C002": {},
+      "C003": {},
+      "C004": {}
+    },
+    "value_scale": "min=-7.2 med=0.152 max=37.1 [linear continuous]",
+    "dup_index": 0,
+    "col_examples": [
+      "logFC",
+      "AveExpr",
+      "t",
+      "P.Value",
+      "adj.P.Val"
+    ],
+    "idx_examples": [
+      "CD58",
+      "TFRC",
+      "ART4",
+      "AHCY",
+      "FN1"
+    ],
+    "per_crew": false,
+    "error": null
+  }
+]

@@ -54,15 +54,20 @@ def main() -> None:
              len(profile), len(narrative), len(dashboard))
 
     # ── 1. Cohort archetype synthesis ─────────────────────────────────────────
-    log.info("Stage 1: cohort archetype synthesis (both-elevated filter, all crew) …")
-    cohort_synth = compute_cohort_archetype_synthesis(profile)
+    log.info(
+        "Stage 1: cohort archetype synthesis "
+        "(fragility-filtered cohort; both-elevated for C003) …"
+    )
+    cohort_synth = compute_cohort_archetype_synthesis(
+        profile, fragility_only_for_cohort=True
+    )
     path = PROC / "archetype_synthesis_cohort.csv"
     cohort_synth.to_csv(path, index=False)
     log.info("  ✓ archetype_synthesis_cohort.csv  (%d rows)", len(cohort_synth))
 
     # ── 2. Run predictions ────────────────────────────────────────────────────
     log.info("Stage 2: running 6 pre-registered predictions …")
-    results_df, verdict = run_th2_skew_test(cohort_synth, narrative)
+    results_df, verdict = run_th2_skew_test(cohort_synth, narrative, profile=profile)
 
     path = PROC / "th2_skew_test_results.csv"
     results_df.to_csv(path, index=False)

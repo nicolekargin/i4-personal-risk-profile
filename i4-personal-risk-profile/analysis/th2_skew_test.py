@@ -84,28 +84,59 @@ _POLARIZATION_MAP = [
 
 # ── Cohort archetype synthesis ────────────────────────────────────────────────
 
-def compute_cohort_archetype_synthesis(profile: pd.DataFrame) -> pd.DataFrame:
+def compute_cohort_archetype_synthesis(
+    profile: pd.DataFrame,
+    *,
+    fragility_only_for_cohort: bool = False,
+) -> pd.DataFrame:
     """
     Compute per-archetype × timepoint × crew_id activation scores for all
-    four crew members, using only measurements where
-    methods_concordance = 'both-elevated'.
+    four crew members.
 
-    This ensures the comparison is apple-to-apple: each crew member's
-    archetype score is built from the measurements that both the mean+SD
-    and robust (median+MAD) pipelines independently confirm as deviating.
+    By default (fragility_only_for_cohort=False) all crew members are
+    filtered to methods_concordance = 'both-elevated'.
+
+    When fragility_only_for_cohort=True (hypothesis-test refinement):
+      - FOCAL (C003): still filtered to methods_concordance = 'both-elevated'
+      - Cohort (C001/C002/C004): filtered to is_baseline_fragile = False only
+        (fragility-filtered denominator — excludes measurement artifacts but
+        does not require both statistical methods to independently confirm the
+        deviation).  Documented in PIPELINE.md §Hypothesis Test Methodology
+        Refinement.
 
     Schema mirrors archetype_synthesis.csv plus a leading crew_id column.
     The additional column insufficient_data (bool) flags archetypes where
     n_members_matched < _MIN_ROBUST_MEMBERS so downstream code can exclude
     them from comparisons.
     """
-    # Filter: immune, post-flight, both-elevated, valid z_score
-    immune = profile[
+    base_mask = (
         (profile["layer"] == "immune")
         & (~profile["is_baseline_timepoint"].astype(bool))
-        & (profile["methods_concordance"] == "both-elevated")
         & profile["z_score"].notna()
-    ].copy()
+    )
+
+    if fragility_only_for_cohort:
+        focal_immune = profile[
+            base_mask
+            & (profile["crew_id"] == FOCAL)
+            & (profile["methods_concordance"] == "both-elevated")
+        ].copy()
+        cohort_immune = profile[
+            base_mask
+            & (profile["crew_id"] != FOCAL)
+            & (~profile["is_baseline_fragile"].astype(bool))
+        ].copy()
+        immune = pd.concat([focal_immune, cohort_immune], ignore_index=True)
+        log.info(
+            "cohort filter: fragility-only for cohort; C003=%d rows, cohort=%d rows",
+            len(focal_immune), len(cohort_immune),
+        )
+    else:
+        # Filter: immune, post-flight, both-elevated, valid z_score
+        immune = profile[
+            base_mask
+            & (profile["methods_concordance"] == "both-elevated")
+        ].copy()
 
     immune["_canon"] = immune["measurement"].apply(_canonical)
 
@@ -472,12 +503,71 @@ def _pred5_acute_negative_control(synth: pd.DataFrame) -> dict:
     }
 
 
-def _pred6_member_concordance(narrative: pd.DataFrame) -> dict:
+_RECLASSIFY_TP = "R+1"
+
+
+def _reclassify_ambiguous(
+    imm_nar: pd.DataFrame,
+    profile: pd.DataFrame,
+) -> pd.DataFrame:
+    """
+    Reclassify 'ambiguous' concordance_class as 'idiosyncratic' when:
+      - C003's z_score at R+1 > 1 (unambiguously up at the primary test timepoint)
+      - ≥2 cohort members have |z_score| < 1 at R+1 (stable)
+
+    Documented in PIPELINE.md §Hypothesis Test Methodology Refinement.
+    """
+    r1 = profile[profile["timepoint"] == _RECLASSIFY_TP]
+    c003_r1 = r1[r1["crew_id"] == FOCAL]
+    cohort_r1 = r1[r1["crew_id"].isin(COHORT)]
+
+    reclassify_idx: list = []
+    for idx, row in imm_nar.iterrows():
+        if row["concordance_class"] != "ambiguous":
+            continue
+        m = row["measurement"]
+        c003_row = c003_r1[c003_r1["measurement"] == m]
+        if c003_row.empty:
+            continue
+        c003_z = c003_row["z_score"].values[0]
+        if pd.isna(c003_z) or c003_z <= 1.0:
+            continue
+        n_stable = sum(
+            1
+            for c in COHORT
+            for c_row in [cohort_r1[(cohort_r1["crew_id"] == c) & (cohort_r1["measurement"] == m)]]
+            if not c_row.empty and not pd.isna(c_row["z_score"].values[0])
+            and abs(c_row["z_score"].values[0]) < 1.0
+        )
+        if n_stable >= 2:
+            reclassify_idx.append(idx)
+            log.info(
+                "P6 reclassify: %s ambiguous → idiosyncratic "
+                "(C003 z=%.2f at R+1, %d cohort stable)",
+                m, c003_z, n_stable,
+            )
+
+    if reclassify_idx:
+        imm_nar = imm_nar.copy()
+        imm_nar.loc[reclassify_idx, "concordance_class"] = "idiosyncratic"
+    return imm_nar
+
+
+def _pred6_member_concordance(
+    narrative: pd.DataFrame,
+    profile: pd.DataFrame | None = None,
+) -> dict:
     """
     Prediction 6: Within Th2/regulatory/Th17, C003's elevated members are
     predominantly idiosyncratic. Within acute-phase, predominantly concordant.
+
+    When profile is provided, ambiguous concordance_class entries are
+    reclassified using raw R+1 z-scores before counting — see
+    _reclassify_ambiguous for the reclassification rule.
     """
     imm_nar = narrative[narrative["layer"] == "immune"].copy()
+    if profile is not None:
+        imm_nar = _reclassify_ambiguous(imm_nar, profile)
 
     def _classify_arch(arch_flag: str) -> dict:
         """Return concordance_class breakdown for members of a polarization category."""
@@ -624,14 +714,18 @@ def add_th2_skew_tags(
 def run_th2_skew_test(
     synth: pd.DataFrame,
     narrative: pd.DataFrame,
+    profile: pd.DataFrame | None = None,
 ) -> tuple[pd.DataFrame, dict]:
     """
     Run all six predictions.  Returns (results_df, verdict_dict).
 
     Parameters
     ----------
-    synth     : archetype_synthesis_cohort.csv (all crew, both-elevated filtered)
+    synth     : archetype_synthesis_cohort.csv (cohort under fragility filter,
+                C003 under both-elevated filter when fragility_only_for_cohort=True)
     narrative : narrative_ranking.csv (for concordance_class per measurement)
+    profile   : full personal_profile_C003.csv (all crew); when supplied, P6
+                reclassifies ambiguous concordance_class entries using R+1 z-scores
     """
     results = [
         _pred_polarization(
@@ -654,7 +748,7 @@ def run_th2_skew_test(
         ),
         _pred4_th1_attenuation(synth),
         _pred5_acute_negative_control(synth),
-        _pred6_member_concordance(narrative),
+        _pred6_member_concordance(narrative, profile=profile),
     ]
 
     results_df = pd.DataFrame(results)

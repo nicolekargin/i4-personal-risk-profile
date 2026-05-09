@@ -243,7 +243,8 @@ const CONTRADICTED_FINDINGS = [
     observedDirection: "elevated",
     observedNote: "above personal baseline",
     timepoint: "R+45",
-    note: "Opposite of typical long-duration ISS mission pattern.",
+    // cohort_concordance.csv R+45: cohort_direction_agree=0, concordance_class=idiosyncratic
+    note: "Opposite of typical long-duration ISS mission pattern. C003-specific: 0 of 3 other crew shared this elevation.",
   },
   {
     measurement: "Hemoglobin",
@@ -253,7 +254,8 @@ const CONTRADICTED_FINDINGS = [
     observedDirection: "elevated",
     observedNote: "consistent with RBC elevation",
     timepoint: "R+45",
-    note: "Consistent with the elevated RBC count — both contradict long-duration expectations.",
+    // cohort_concordance.csv R+45: cohort_direction_agree=0, concordance_class=idiosyncratic
+    note: "Consistent with the elevated RBC count — both contradict long-duration expectations. C003-specific: 0 of 3 other crew elevated.",
   },
   {
     measurement: "Hematocrit",
@@ -261,9 +263,10 @@ const CONTRADICTED_FINDINGS = [
     expectedDirection: "depressed",
     expectedNote: "plasma volume shifts",
     observedDirection: "elevated",
-    observedNote: "persistent through R+82",
+    // cohort_concordance.csv R+82: cohort_direction_agree=1, concordance_class=discordant
+    observedNote: "2 of 4 crew elevated (C003 + 1 other)",
     timepoint: "R+82",
-    note: "Persists 82 days post-flight.",
+    note: "2 of 4 crew elevated (C003 + 1 other); C003 elevation persists 82 days post-flight.",
   },
   {
     measurement: "MCV",
@@ -271,9 +274,10 @@ const CONTRADICTED_FINDINGS = [
     expectedDirection: "elevated",
     expectedNote: "macrocytosis",
     observedDirection: "depressed",
-    observedNote: "all 4 crew shifted",
+    // cohort_concordance.csv R+45: cohort_direction_agree=2, C001 z=−0.06 (stable)
+    observedNote: "3 of 4 crew shifted (C001: stable)",
     timepoint: "R+45",
-    note: "Mean corpuscular volume dropped cohort-wide.",
+    note: "Mean corpuscular volume dropped in 3 of 4 crew; C001 remained at baseline.",
   },
 ];
 
@@ -289,8 +293,14 @@ const MISSED_CBC = [
     timepoint: "R+1",
   },
   {
-    measurement: "Monocytes",
-    personalDeviation: "7.7 SD above baseline",
+    measurement: "Monocytes (R+1)",
+    personalDeviation: "+5.7 SD above baseline",
+    clinicalRange: "Within reference",
+    timepoint: "R+1",
+  },
+  {
+    measurement: "Monocytes (R+194)",
+    personalDeviation: "+7.7 SD above baseline",
     clinicalRange: "Within reference",
     timepoint: "R+194",
   },
@@ -307,25 +317,25 @@ const MISSED_CBC = [
 const MISSED_CYTOKINE = [
   {
     measurement: "IL-6",
-    personalDeviation: "+31.5 SD (mean+SD) · 2.9× fold",
+    personalDeviation: "+31.5 SD (mean+SD) · 2.90× fold",
     clinicalRange: "No standard clinical range",
     timepoint: "R+1",
   },
   {
     measurement: "I-309",
-    personalDeviation: "+41.0 SD (robust z) · +12.5 SD (mean+SD) · 8.3× fold",
+    personalDeviation: "+41.0 SD (robust z) · +12.5 SD (mean+SD) · 8.32× fold",
     clinicalRange: "No standard clinical range",
     timepoint: "R+194",
   },
   {
     measurement: "IL-4",
-    personalDeviation: "+5.5 SD above baseline · 5.2× fold",
+    personalDeviation: "+5.5 SD above baseline · 5.15× fold",
     clinicalRange: "No standard clinical range",
     timepoint: "R+194",
   },
   {
     measurement: "IL-13",
-    personalDeviation: "+4.4 SD above baseline · 8.0× fold",
+    personalDeviation: "+4.4 SD above baseline · 8.04× fold",
     clinicalRange: "No standard clinical range",
     timepoint: "R+1",
   },
@@ -427,7 +437,7 @@ function IL6MiniChart() {
             dataKey="days"
             type="number"
             domain={[-100, 205]}
-            ticks={[-92, -44, -3, 1, 45, 82, 194]}
+            ticks={[-92, -44, 1, 45, 82, 194]}
             tickFormatter={d => {
               if (d === 1) return 'R+1';
               if (d < 0) return `L${d}`;
@@ -460,6 +470,7 @@ function IL6MiniChart() {
               position: 'insideTopLeft',
               fill: '#6b7280',
               fontSize: 8,
+              fontStyle: 'italic',
               fontFamily: 'IBM Plex Mono, monospace',
               dy: -4,
             }}
@@ -502,11 +513,11 @@ function WBCDualScale() {
 
   return (
     <div style={{ marginTop: 24, overflowX: 'auto' }}>
-      <svg viewBox="0 0 560 110" style={{ width: '100%', minWidth: 300, display: 'block' }}>
+      <svg viewBox="0 0 560 120" style={{ width: '100%', minWidth: 300, display: 'block' }}>
         {/* Clinical range bar */}
-        <rect x={clinL} y={52} width={clinH - clinL} height={18} fill="#1f2937" rx="3" />
+        <rect x={clinL} y={62} width={clinH - clinL} height={18} fill="#1f2937" rx="3" />
         <text
-          x={(clinL + clinH) / 2} y={46}
+          x={(clinL + clinH) / 2} y={56}
           textAnchor="middle"
           fill="#6b7280" fontSize="9"
           fontFamily="IBM Plex Mono, monospace"
@@ -516,7 +527,7 @@ function WBCDualScale() {
 
         {/* Both-in-range note */}
         <text
-          x={(clinL + clinH) / 2} y={81}
+          x={(clinL + clinH) / 2} y={91}
           textAnchor="middle"
           fill="#4b5563" fontSize="8"
           fontFamily="IBM Plex Mono, monospace"
@@ -525,7 +536,7 @@ function WBCDualScale() {
         </text>
 
         {/* Personal baseline line */}
-        <line x1={bl} y1={38} x2={bl} y2={76} stroke="#00d9ff" strokeWidth="2" />
+        <line x1={bl} y1={38} x2={bl} y2={86} stroke="#00d9ff" strokeWidth="2" />
         <text x={bl} y={33} textAnchor="middle" fill="#00d9ff" fontSize="9" fontFamily="IBM Plex Mono, monospace">
           Baseline
         </text>
@@ -534,7 +545,7 @@ function WBCDualScale() {
         </text>
 
         {/* R+1 value line */}
-        <line x1={r1} y1={38} x2={r1} y2={76} stroke="#ffb000" strokeWidth="2" strokeDasharray="5 3" />
+        <line x1={r1} y1={38} x2={r1} y2={86} stroke="#ffb000" strokeWidth="2" strokeDasharray="5 3" />
         <text x={r1} y={33} textAnchor="middle" fill="#ffb000" fontSize="9" fontFamily="IBM Plex Mono, monospace">
           R+1
         </text>
@@ -543,10 +554,10 @@ function WBCDualScale() {
         </text>
 
         {/* Distance annotation */}
-        <line x1={r1 + 2} y1={64} x2={bl - 2} y2={64} stroke="#9ca3af" strokeWidth="1" markerEnd="url(#arr-r)" markerStart="url(#arr-l)" />
-        <rect x={(r1 + bl) / 2 - 22} y={57} width={44} height={14} fill="#0a0e1a" />
+        <line x1={r1 + 2} y1={74} x2={bl - 2} y2={74} stroke="#9ca3af" strokeWidth="1" markerEnd="url(#arr-r)" markerStart="url(#arr-l)" />
+        <rect x={(r1 + bl) / 2 - 22} y={67} width={44} height={14} fill="#0a0e1a" />
         <text
-          x={(r1 + bl) / 2} y={67}
+          x={(r1 + bl) / 2} y={77}
           textAnchor="middle"
           fill="#e8eaed" fontSize="9"
           fontFamily="IBM Plex Mono, monospace"
@@ -558,16 +569,16 @@ function WBCDualScale() {
         {/* Axis ticks */}
         {[2, 4, 6, 8, 10, 12].map(v => (
           <g key={v}>
-            <line x1={sc(v)} y1={72} x2={sc(v)} y2={78} stroke="#374151" strokeWidth="1" />
-            <text x={sc(v)} y={90} textAnchor="middle" fill="#4b5563" fontSize="8" fontFamily="IBM Plex Mono, monospace">
+            <line x1={sc(v)} y1={82} x2={sc(v)} y2={88} stroke="#374151" strokeWidth="1" />
+            <text x={sc(v)} y={100} textAnchor="middle" fill="#4b5563" fontSize="8" fontFamily="IBM Plex Mono, monospace">
               {v}
             </text>
           </g>
         ))}
-        <text x={280} y={103} textAnchor="middle" fill="#4b5563" fontSize="8" fontFamily="IBM Plex Mono, monospace">
+        <text x={280} y={113} textAnchor="middle" fill="#4b5563" fontSize="8" fontFamily="IBM Plex Mono, monospace">
           K/μL
         </text>
-        <line x1={30} y1={72} x2={530} y2={72} stroke="#374151" strokeWidth="1" />
+        <line x1={30} y1={82} x2={530} y2={82} stroke="#374151" strokeWidth="1" />
 
         {/* Arrow markers */}
         <defs>
@@ -839,7 +850,7 @@ function FindingCard({ finding }) {
             style={{ borderColor: '#7f1d1d', color: '#f87171' }}
             title="Direction-of-effect differs from published spaceflight literature; n=4 prohibits statistical inference"
           >
-            vs. literature: contradicted
+            literature mismatch
           </span>
         )}
       </div>

@@ -33,17 +33,18 @@ const HEADLINE_IL6 = {
 const HEADLINE_WBC = {
   zScore: 10.2,
   foldChange: 0.73,
-  clinicalRangeLow: 4.0,
-  clinicalRangeHigh: 11.0,
-  personalBaselineMean: 6.8,
-  postFlightValue: 5.0,
+  clinicalRangeLow: 3.8,    // CSV: personal_profile_C003.csv, measurement=white_blood_cell_count, clinical_min=3.8
+  clinicalRangeHigh: 10.8,  // CSV: same row, clinical_max=10.8
+  personalBaselineMean: 9.57, // CSV: same measurement, baseline_mean=9.566667
+  postFlightValue: 7.0,     // CSV: same measurement, timepoint=R+1, value_raw=7.0
   unit: "K/μL",
-  takeaway: "C003's white blood cell count dropped 10 standard deviations below their personal baseline at R+1 — yet remained well within Quest Diagnostics' clinical reference range. Standard lab tests would have called this normal.",
+  takeaway: "C003's white blood cell count dropped 10 standard deviations below their personal baseline at R+1 — yet remained within the 3.8–10.8 K/μL clinical reference range. Standard lab tests would have called this normal.",
   thesis: "Population-based reference ranges flag values unusual across a large group. They cannot detect a value unusual for a specific individual. This is why personalized monitoring matters.",
 };
 
 const BIG_STAT = {
-  number: "47%",
+  // 34/71 = 47.89% → rounds to 48% (source: recovery_kinetics_C003.csv, layer=immune)
+  number: "48%",
   label: "of C003's immune perturbations remained unresolved",
   qualifier: "194 days after returning to Earth",
   detail: "Of 71 measured cytokines, 34 had not returned to personal baseline within the observation window. Spaceflight is not a transient stress — it produces sustained physiological alterations measurable across more than six months of recovery.",
@@ -65,24 +66,30 @@ const IL6_BASELINE_MEAN = 2.62; // mean of L-92, L-44, L-3 raw values
 const VITAL_GAUGES = [
   {
     name: "Inflammatory Load",
-    value: 78,
+    display: "+31.5 SD",
+    displaySub: "peak deviation at R+1",
     state: "elevated",
-    description: "Composite score from acute-phase response and chemokine archetypes at R+1",
+    // Source: personal_profile_C003.csv, measurement=il_6, timepoint=R+1, z_score=31.509928 (mean+SD method)
+    description: "Maximum cytokine deviation at R+1 · IL-6 z-score (mean+SD method) · robust z = +105.7 SD (median+MAD)",
     interpretation: "Significantly elevated. Acute-phase response activated; monocyte recruitment elevated.",
   },
   {
     name: "Immune Stability",
-    value: 32,
+    display: "Type-2",
+    displaySub: "dominant · Th1 attenuated",
     state: "polarized",
-    description: "Balance across Th1, Th2, Th17, and regulatory archetypes post-flight",
-    interpretation: "Polarized toward type-2 / regulatory pattern. Th1 signaling attenuated cohort-wide.",
+    // Source: archetype_synthesis.csv, timepoint=R+1: th2_polarization score=0.83, th1_polarization score=0.24
+    description: "Th2 archetype activation 0.83 · Th1 activation 0.24 at R+1 (archetype_synthesis.csv)",
+    interpretation: "Pattern consistent with type-2 immune activation (formal hypothesis partially supported: 2 of 6 pre-registered predictions strictly passed).",
   },
   {
-    name: "Recovery Completeness",
-    value: 11,
+    name: "Recovery Velocity",
+    display: "4 of 71",
+    displaySub: "cytokines fully recovered",
     state: "incomplete",
-    description: "Percentage of 71 cytokines that returned to personal baseline by R+194",
-    interpretation: "Most perturbations unresolved: 47% incomplete, 46% slow, 6% fast recovery.",
+    // Source: recovery_kinetics_C003.csv, layer=immune: fast=4, slow=33, incomplete=34, total=71
+    description: "Fraction of perturbations returning to personal baseline within the 194-day observation window",
+    interpretation: "Most perturbations unresolved: 48% incomplete, 46% slow, 6% fast recovery.",
   },
 ];
 
@@ -103,10 +110,11 @@ const SHARED_FINDINGS = [
     foldChange: 0.05,
     direction: "down",
     timepoint: "R+82",
-    concordance: "All 4 crew suppressed",
+    // cohort_concordance.csv: cohort_direction_agree=2/cohort_n=3 — C001 strongly elevated (z=+7.12, fold=10.76×)
+    concordance: "3 of 4 crew suppressed (C001: z=+7.12 elevated)",
     literatureStatus: "contradicted",
     contradicted: true,
-    takeaway: "Th1 interferon signaling broadly suppressed across the cohort — opposite to what spaceflight literature predicted.",
+    takeaway: "Th1 interferon signaling suppressed in 3 of 4 crew at R+82, with one crew member (C001) showing strong elevation in the opposite direction (z=+7.12, fold=10.76×). The split pattern demonstrates that even cohort-level signals can mask individual-level heterogeneity — the central argument for personal-baseline analysis.",
   },
   {
     measurement: "TARC",
@@ -114,9 +122,10 @@ const SHARED_FINDINGS = [
     foldChange: 0.21,
     direction: "down",
     timepoint: "R+45",
-    concordance: "All 4 crew suppressed",
+    // cohort_concordance.csv: cohort_direction_agree=2/cohort_n=3 — C004 elevated (fold=2.077×)
+    concordance: "3 of 4 crew suppressed (C004: elevated)",
     literatureStatus: "novel",
-    takeaway: "TARC dropped sharply to 21% of baseline across all four crew at 45 days post-flight.",
+    takeaway: "TARC dropped sharply to 21% of baseline in 3 of 4 crew at 45 days post-flight (C004 showed elevation); a novel cohort-level finding without a published spaceflight precedent.",
   },
   {
     measurement: "MCV",
@@ -124,10 +133,11 @@ const SHARED_FINDINGS = [
     foldChange: 0.95,
     direction: "down",
     timepoint: "R+45",
-    concordance: "All 4 crew shifted",
+    // cohort_concordance.csv: cohort_direction_agree=2/cohort_n=3 — C001 essentially flat (z=−0.06)
+    concordance: "3 of 4 crew shifted (C001: stable)",
     literatureStatus: "contradicted",
     contradicted: true,
-    takeaway: "Mean corpuscular volume dropped — opposite to long-duration spaceflight expectations.",
+    takeaway: "Mean corpuscular volume dropped in 3 of 4 crew — opposite to long-duration spaceflight expectations of macrocytosis.",
   },
 ];
 
@@ -186,18 +196,20 @@ const PERSONAL_FINDINGS = [
     measurement: "I-309",
     archetype: "Chemokine (CCL1)",
     foldChange: 8.32,
+    // z_score_robust=41.008 (primary, median+MAD); z_score=12.461 (mean+SD) — personal_profile_C003.csv, timepoint=R+194
     zScore: 41.01,
     direction: "up",
     timepoint: "R+194",
     cohortStatus: "Opposite to cohort",
-    takeaway: "I-309 elevated 8-fold opposite to the cohort direction at 194 days — the highest-z idiosyncratic immune signal in the dataset.",
+    takeaway: "I-309 elevated 8.32-fold opposite to the cohort direction at 194 days — +41.0 SD (robust z, median+MAD) · +12.5 SD (mean+SD). Both methods confirm the signal. The highest-z idiosyncratic immune finding in the dataset.",
   },
 ];
 
 const PERSONAL_PHENOTYPE_FRAMING = {
   pattern: "Type 2 immune pattern with reciprocal Th1 suppression",
-  description: "C003 is the only crew member with three robustly-elevated type-2 cytokines (IL-4, IL-13, IL-5), accompanied by elevated regulatory IL-10 and concordant suppression of Th1 IFNγ. While the formal Th2 polarization hypothesis was partially supported (2 of 6 pre-registered predictions strictly passed), the descriptive pattern is consistent with type-2 immune activation overlaid on the cohort's shared acute-phase response.",
-  honestCaveat: "The formal hypothesis test was inconclusive on most predictions due to insufficient cohort data after robustness filtering. We report the descriptive evidence honestly rather than claiming formal Th2 polarization.",
+  description: "C003 is the only crew member with three robustly-elevated type-2 cytokines (IL-4, IL-13, IL-5), accompanied by elevated regulatory IL-10 and concordant suppression of Th1 IFNγ. The formal Th2 polarization hypothesis was partially supported (2 of 6 pre-registered predictions strictly passed) — the descriptive pattern is consistent with type-2 immune activation, though not fully consistent with classical Th2 polarization.",
+  // th2_skew_verdict.json: verdict="partially supported", n_supported=2, n_total=6, effective=3.5
+  honestCaveat: "Pattern consistent with type-2 immune activation (formal hypothesis partially supported: 2 of 6 pre-registered predictions strictly passed). The formal hypothesis test was inconclusive on most predictions due to insufficient cohort data after robustness filtering. We report the descriptive evidence honestly rather than claiming formal Th2 polarization.",
 };
 
 const CONTRADICTED_FINDINGS = [
@@ -216,10 +228,11 @@ const CONTRADICTED_FINDINGS = [
     layer: "immune",
     expectedDirection: "elevated",
     expectedNote: "Th1 activation",
-    observedDirection: "suppressed",
-    observedNote: "all 4 crew concordant",
+    observedDirection: "suppressed in C003",
+    // personal_profile_C003.csv R+82: C001 z=+7.12 (elevated), C002/C003/C004 suppressed
+    observedNote: "3 of 4 crew suppressed; C001 strongly elevated (z=+7.12, fold=10.76×)",
     timepoint: "R+82",
-    note: "All four crew members showed suppression — a cohort-wide contradiction of expectations.",
+    note: "C002, C003, C004 showed Th1 suppression; C001 showed strong Th1 elevation (fold=10.76×), confirming that even cohort-level patterns mask individual heterogeneity.",
   },
   {
     measurement: "Red Blood Cell Count",
@@ -267,7 +280,7 @@ const MISSED_BY_STANDARD_TESTS = [
   {
     measurement: "White Blood Cell Count",
     personalDeviation: "10.2 SD below baseline",
-    clinicalRange: "Within reference (4.0–11.0 K/μL)",
+    clinicalRange: "Within reference (3.8–10.8 K/μL)",
     timepoint: "R+1",
   },
   {
@@ -276,12 +289,8 @@ const MISSED_BY_STANDARD_TESTS = [
     clinicalRange: "Within reference",
     timepoint: "R+194",
   },
-  {
-    measurement: "Basophils",
-    personalDeviation: "5.8 SD above baseline",
-    clinicalRange: "Within reference",
-    timepoint: "R+45",
-  },
+  // Basophils removed: z_score_robust=NaN for all % rows (baseline % values too uniform for MAD).
+  // This finding does not survive the both-methods robustness test required by PIPELINE.md.
   {
     measurement: "Red Blood Cell Count",
     personalDeviation: "6.8 SD above baseline",
@@ -308,9 +317,13 @@ Full pipeline documented in PIPELINE.md in the repository.`;
 const LIMITATIONS = [
   "n = 4 crew members prohibits inferential statistics; all cohort comparisons are direction-of-effect concordance only.",
   "Personal baselines computed from n = 3 pre-flight timepoints. Bootstrap CIs explicitly represent this uncertainty.",
+  "With n=3 pre-flight samples (df=2), the formal z-threshold for α=0.05 is approximately 4.3, not 2; bootstrap 95% CIs replace the t-threshold for quantifying signal uncertainty at each gating step.",
+  "All findings reported with bootstrap 95% CIs (1000 resamples). For IL-6 at R+1, lower CI bound +29.88 SD demonstrates the finding is not a tight-baseline artifact.",
   "No R+194 microbiome data exists; microbial recovery kinetics capped at R+82.",
   "Eve and Alamar cytokine panels cannot be directly merged due to different unit scales; only Eve panel used in primary immune analysis.",
   "Microbiome analysis restricted to oral and nasal cavities for interpretability.",
+  "Microbial |z| values capped at 50 in dashboard for interpretability; raw values preserved in master CSV (data/processed/personal_profile_C003.csv).",
+  "Subject C003 was selected by data completeness across assays prior to any signal preview, not by signal magnitude. Documented in PIPELINE.md.",
   "Anonymized subject identity (C003) is not linked to any specific named crew member.",
 ];
 
@@ -432,10 +445,10 @@ function IL6MiniChart() {
 function WBCDualScale() {
   // x scale: [1.0, 13.0] K/μL → [30, 530] px  (500px over 12 units)
   const sc = v => 30 + ((v - 1) / 12) * 500;
-  const clinL = sc(4.0);   // 155.0
-  const clinH = sc(11.0);  // 488.3
-  const bl    = sc(6.8);   // 321.7
-  const r1    = sc(5.0);   // 238.3
+  const clinL = sc(3.8);   // 146.7 — source: personal_profile_C003.csv clinical_min=3.8
+  const clinH = sc(10.8);  // 438.3 — source: personal_profile_C003.csv clinical_max=10.8
+  const bl    = sc(9.57);  // 387.1 — source: personal_profile_C003.csv baseline_mean=9.566667
+  const r1    = sc(7.0);   // 280.0 — source: personal_profile_C003.csv timepoint=R+1 value_raw=7.0
 
   return (
     <div style={{ marginTop: 24, overflowX: 'auto' }}>
@@ -448,7 +461,7 @@ function WBCDualScale() {
           fill="#6b7280" fontSize="9"
           fontFamily="IBM Plex Mono, monospace"
         >
-          Clinical reference range (4.0 – 11.0 K/μL)
+          Clinical reference range (3.8 – 10.8 K/μL)
         </text>
 
         {/* Both-in-range note */}
@@ -467,7 +480,7 @@ function WBCDualScale() {
           Baseline
         </text>
         <text x={bl} y={23} textAnchor="middle" fill="#00d9ff" fontSize="8" fontFamily="IBM Plex Mono, monospace">
-          6.8 K/μL
+          9.57 K/μL
         </text>
 
         {/* R+1 value line */}
@@ -476,7 +489,7 @@ function WBCDualScale() {
           R+1
         </text>
         <text x={r1} y={23} textAnchor="middle" fill="#ffb000" fontSize="8" fontFamily="IBM Plex Mono, monospace">
-          5.0 K/μL
+          7.0 K/μL
         </text>
 
         {/* Distance annotation */}
@@ -592,7 +605,7 @@ function HeadlineWBC() {
         className="font-mono text-xs px-3 py-1 rounded border inline-block self-start mt-1 mb-4"
         style={{ borderColor: '#14532d', color: '#22c55e', background: 'rgba(34,197,94,0.06)' }}
       >
-        Within clinical reference range (4.0–11.0 K/μL)
+        Within clinical reference range (3.8–10.8 K/μL)
       </div>
       <WBCDualScale />
       <p className="text-sm mt-4 leading-relaxed" style={{ color: '#9ca3af' }}>
@@ -696,26 +709,8 @@ function BigStat() {
 // ---- Vital Gauge (SVG) ----
 
 function VitalGauge({ gauge }) {
-  const { name, value, state, description, interpretation } = gauge;
+  const { name, display, displaySub, state, description, interpretation } = gauge;
   const color = { elevated: '#00d9ff', polarized: '#ffb000', incomplete: '#ff4757' }[state] || '#9ca3af';
-
-  // Semicircle arc math:
-  // cx=100, cy=100, r=75
-  // 0% = left (25, 100), 100% = right (175, 100), 50% = top (100, 25)
-  // angle in standard math convention (0=right, CCW): angle = π*(1 - v/100)
-  // endpoint: ex = cx + r*cos(angle), ey = cy - r*sin(angle)
-  // SVG arc: counterclockwise (sweep=0), small arc (large-arc=0, since max sweep is 180°)
-  const cx = 100, cy = 100, r = 75;
-  const angle = Math.PI * (1 - value / 100);
-  const ex = (cx + r * Math.cos(angle)).toFixed(1);
-  const ey = (cy - r * Math.sin(angle)).toFixed(1);
-
-  const bgPath = `M ${cx - r} ${cy} A ${r} ${r} 0 0 0 ${cx} ${cy - r} A ${r} ${r} 0 0 0 ${cx + r} ${cy}`;
-  const fgPath = value <= 0
-    ? null
-    : value >= 100
-      ? bgPath
-      : `M ${cx - r} ${cy} A ${r} ${r} 0 0 0 ${ex} ${ey}`;
 
   return (
     <div
@@ -725,31 +720,24 @@ function VitalGauge({ gauge }) {
       <div className="font-mono text-xs tracking-widest mb-4" style={{ color: '#6b7280' }}>
         {name.toUpperCase()}
       </div>
-      <svg viewBox="0 0 200 140" style={{ width: 180, height: 126 }}>
-        <path d={bgPath} fill="none" stroke="#1f2937" strokeWidth="10" strokeLinecap="round" />
-        {fgPath && (
-          <path d={fgPath} fill="none" stroke={color} strokeWidth="10" strokeLinecap="round" />
-        )}
-        <text
-          x={cx} y={cy + 20}
-          textAnchor="middle"
-          fill={color}
-          fontSize="28"
-          fontFamily="IBM Plex Mono, monospace"
-          fontWeight="500"
-        >
-          {value}
-        </text>
-        <text
-          x={cx} y={cy + 36}
-          textAnchor="middle"
-          fill="#4b5563"
-          fontSize="10"
-          fontFamily="IBM Plex Mono, monospace"
-        >
-          / 100
-        </text>
-      </svg>
+      <div
+        className="font-display font-bold leading-none my-4"
+        style={{
+          fontSize: 'clamp(1.8rem,5vw,2.6rem)',
+          color,
+          minHeight: 64,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        {display}
+      </div>
+      {displaySub && (
+        <div className="font-mono text-xs mb-4" style={{ color: '#6b7280' }}>
+          {displaySub}
+        </div>
+      )}
       <p className="text-xs leading-relaxed mb-3" style={{ color: '#6b7280' }}>{description}</p>
       <p className="text-sm leading-relaxed" style={{ color: '#d1d5db' }}>{interpretation}</p>
     </div>
@@ -799,8 +787,9 @@ function FindingCard({ finding }) {
           <span
             className="font-mono text-xs px-2 py-0.5 rounded border ml-2 whitespace-nowrap flex-shrink-0"
             style={{ borderColor: '#7f1d1d', color: '#f87171' }}
+            title="Direction-of-effect differs from published spaceflight literature; n=4 prohibits statistical inference"
           >
-            contradicted
+            vs. literature: contradicted
           </span>
         )}
       </div>
@@ -1035,7 +1024,7 @@ function StoryPanelMissedByStandard() {
         style={{ borderColor: '#78350f', background: 'rgba(255,176,0,0.04)' }}
       >
         <p className="leading-relaxed mb-3" style={{ color: '#d1d5db' }}>
-          Population-based reference ranges are designed to flag values that are statistically unusual across a large group. They cannot detect a value that is unusual for a specific individual. C003's white blood cell count at R+1 was approximately 5.0 K/μL — solidly within Quest Diagnostics' reference range of 4.0–11.0 — yet 10 standard deviations below C003's own pre-flight baseline. No standard clinical test would have flagged this. Personalized monitoring would have.
+          Population-based reference ranges are designed to flag values that are statistically unusual across a large group. They cannot detect a value that is unusual for a specific individual. C003's white blood cell count at R+1 was approximately 7.0 K/μL — within the clinical reference range of 3.8–10.8 — yet 10 standard deviations below C003's own pre-flight baseline. No standard clinical test would have flagged this. Personalized monitoring would have.
         </p>
         <p className="text-sm leading-relaxed" style={{ color: '#9ca3af' }}>
           Beyond clinical tests, 71 cytokine measurements in this study have no clinical reference ranges at all. These markers — including IL-6, IL-4, TARC, and others — are not part of standard-of-care blood panels. They are only accessible through research-grade multi-omics profiling. C003's most extreme findings (IL-6 at +31 SD, I-309 at +12 SD) are invisible to standard medicine by definition.
@@ -1095,7 +1084,10 @@ function MethodologyFooter() {
               style={{ borderTop: '1px solid #1f2937', display: 'flex', flexDirection: 'column', gap: 4 }}
             >
               <p className="font-mono text-xs" style={{ color: '#4b5563' }}>
-                Data: Inspiration 4 multi-omics dataset (Bhatt et al., 2024, Nature)
+                Data: Overbey EG, Kim JK, Tierney BT et al. Nature 632, 1145–1154 (2024). doi:10.1038/s41586-024-07639-y
+              </p>
+              <p className="font-mono text-xs" style={{ color: '#4b5563' }}>
+                Source datasets: NASA OSDR OSD-569 (CBC), OSD-572 (metagenomics), OSD-575 (Eve cytokine panel)
               </p>
               <p className="font-mono text-xs" style={{ color: '#4b5563' }}>
                 Analysis: Personal baseline z-scoring with bootstrap CI (n=1000)

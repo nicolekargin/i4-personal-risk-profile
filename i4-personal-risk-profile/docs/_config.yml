@@ -1,0 +1,8 @@
+theme: null
+plugins: []
+include:
+  - "*.html"
+  - "*.js"
+  - "*.css"
+exclude:
+  - "*.md"

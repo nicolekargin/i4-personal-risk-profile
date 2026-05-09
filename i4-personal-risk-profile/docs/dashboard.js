@@ -52,16 +52,17 @@ const BIG_STAT = {
 
 // Actual values from data/processed/headline_trajectories.csv
 // value_raw column (pg/mL), z_score column
+// All values: personal_profile_C003.csv, measurement=il_6, layer=immune, value_raw (pg/mL)
 const IL6_TRAJECTORY = [
-  { timepoint: "L-92", days: -92, value: 2.67, zScore:  0.48, phase: "pre-flight"  },
-  { timepoint: "L-44", days: -44, value: 2.69, zScore:  0.67, phase: "pre-flight"  },
-  { timepoint: "L-3",  days:  -3, value: 2.51, zScore: -1.15, phase: "pre-flight"  },
-  { timepoint: "R+1",  days:   1, value: 7.60, zScore: 31.51, phase: "post-flight" },
-  { timepoint: "R+45", days:  45, value: 1.32, zScore:-16.24, phase: "post-flight" },
-  { timepoint: "R+82", days:  82, value: 3.64, zScore:  9.02, phase: "post-flight" },
-  { timepoint: "R+194",days: 194, value: 5.78, zScore: 22.84, phase: "post-flight" },
+  { timepoint: "L-92", days: -92, c003: 2.67, c001: 2.87, c002: 4.49, c004: 4.90, zScore:  0.48, phase: "pre-flight"  },
+  { timepoint: "L-44", days: -44, c003: 2.69, c001: 2.58, c002: 4.19, c004: 3.09, zScore:  0.67, phase: "pre-flight"  },
+  { timepoint: "L-3",  days:  -3, c003: 2.51, c001: 5.94, c002: 4.53, c004: 3.97, zScore: -1.15, phase: "pre-flight"  },
+  { timepoint: "R+1",  days:   1, c003: 7.60, c001: 6.86, c002: 5.76, c004: 6.34, zScore: 31.51, phase: "post-flight" },
+  { timepoint: "R+45", days:  45, c003: 1.32, c001: 1.65, c002: 12.07, c004: 3.59, zScore:-16.24, phase: "post-flight" },
+  { timepoint: "R+82", days:  82, c003: 3.64, c001: 1.04, c002: 5.11,  c004: 6.02, zScore:  9.02, phase: "post-flight" },
+  { timepoint: "R+194",days: 194, c003: 5.78, c001: 4.26, c002: 0.75,  c004: 4.11, zScore: 22.84, phase: "post-flight" },
 ];
-const IL6_BASELINE_MEAN = 2.62; // mean of L-92, L-44, L-3 raw values
+const IL6_BASELINE_MEAN = 2.62; // C003 mean of L-92, L-44, L-3 raw values
 
 const VITAL_GAUGES = [
   {
@@ -369,22 +370,31 @@ function IL6MiniChart() {
   const CustomTooltip = ({ active, payload, label }) => {
     if (!active || !payload || !payload.length) return null;
     const d = payload[0].payload;
+    const crewColors = { c003: '#00d9ff', c001: '#6b7280', c002: '#f59e0b', c004: '#a78bfa' };
+    const crewLabels = { c003: 'C003 (subject)', c001: 'C001', c002: 'C002', c004: 'C004' };
     return (
       <div
         className="font-mono text-xs"
-        style={{ background: '#0f1424', border: '1px solid #1f2937', borderRadius: 4, padding: '8px 12px' }}
+        style={{ background: '#0f1424', border: '1px solid #1f2937', borderRadius: 4, padding: '8px 12px', minWidth: 140 }}
       >
-        <div style={{ color: '#9ca3af' }}>{d.timepoint}</div>
-        <div style={{ color: '#00d9ff' }}>{d.value.toFixed(2)} pg/mL</div>
-        <div style={{ color: '#6b7280' }}>z = {d.zScore.toFixed(1)} SD</div>
+        <div style={{ color: '#9ca3af', marginBottom: 4 }}>{d.timepoint}</div>
+        {['c003', 'c001', 'c002', 'c004'].map(key => (
+          <div key={key} style={{ color: crewColors[key], display: 'flex', justifyContent: 'space-between', gap: 12 }}>
+            <span>{crewLabels[key]}</span>
+            <span>{d[key] != null ? d[key].toFixed(2) + ' pg/mL' : '—'}</span>
+          </div>
+        ))}
+        {d.zScore != null && (
+          <div style={{ color: '#6b7280', marginTop: 4 }}>C003 z = {d.zScore.toFixed(1)} SD</div>
+        )}
       </div>
     );
   };
 
   return (
-    <div style={{ height: 160, marginTop: 16 }}>
+    <div style={{ height: 200, marginTop: 16 }}>
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={IL6_TRAJECTORY} margin={{ top: 8, right: 8, left: 0, bottom: 4 }}>
+        <LineChart data={IL6_TRAJECTORY} margin={{ top: 24, right: 16, left: 8, bottom: 32 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
           <XAxis
             dataKey="days"
@@ -396,18 +406,20 @@ function IL6MiniChart() {
               if (d < 0) return `L${d}`;
               return `R+${d}`;
             }}
-            tick={{ fill: '#9ca3af', fontSize: 9, fontFamily: 'IBM Plex Mono, monospace' }}
+            tick={{ fill: '#9ca3af', fontSize: 8, fontFamily: 'IBM Plex Mono, monospace', angle: -45, textAnchor: 'end', dy: 4 }}
             axisLine={{ stroke: '#374151' }}
             tickLine={false}
             interval={0}
+            height={40}
           />
           <YAxis
-            domain={[0, 9]}
-            ticks={[0, 2, 4, 6, 8]}
-            tick={{ fill: '#9ca3af', fontSize: 9, fontFamily: 'IBM Plex Mono, monospace' }}
+            domain={[0, 14]}
+            ticks={[0, 2, 4, 6, 8, 10, 12, 14]}
+            tick={{ fill: '#9ca3af', fontSize: 8, fontFamily: 'IBM Plex Mono, monospace' }}
             axisLine={false}
             tickLine={false}
-            width={24}
+            width={28}
+            label={{ value: 'pg/mL', angle: -90, position: 'insideLeft', fill: '#6b7280', fontSize: 8, fontFamily: 'IBM Plex Mono, monospace', dx: 8 }}
           />
           <Tooltip content={<CustomTooltip />} />
           <ReferenceArea x1={-3} x2={1} fill="#00d9ff" fillOpacity={0.05} />
@@ -417,7 +429,7 @@ function IL6MiniChart() {
             stroke="#374151"
             strokeDasharray="4 4"
             label={{
-              value: 'baseline',
+              value: 'C003 baseline',
               position: 'insideTopLeft',
               fill: '#6b7280',
               fontSize: 8,
@@ -425,14 +437,25 @@ function IL6MiniChart() {
               dy: -4,
             }}
           />
+          {/* Cohort lines first (behind C003) */}
+          <Line type="monotone" dataKey="c001" stroke="#6b7280" strokeWidth={1} dot={false} connectNulls name="C001" />
+          <Line type="monotone" dataKey="c002" stroke="#f59e0b" strokeWidth={1} dot={false} strokeOpacity={0.6} connectNulls name="C002" />
+          <Line type="monotone" dataKey="c004" stroke="#a78bfa" strokeWidth={1} dot={false} strokeOpacity={0.6} connectNulls name="C004" />
+          {/* C003 emphasized on top */}
           <Line
             type="monotone"
-            dataKey="value"
+            dataKey="c003"
             stroke="#00d9ff"
-            strokeWidth={2}
+            strokeWidth={2.5}
             dot={{ fill: '#00d9ff', strokeWidth: 0, r: 3 }}
             activeDot={{ r: 5, fill: '#00d9ff', stroke: '#0a0e1a', strokeWidth: 2 }}
             connectNulls
+            name="C003 (subject)"
+          />
+          {/* +31.5 SD callout at R+1 */}
+          <ReferenceDot
+            x={1} y={7.60} r={0}
+            label={{ value: '+31.5 SD', position: 'top', fill: '#00d9ff', fontSize: 8, fontFamily: 'IBM Plex Mono, monospace', dy: -4 }}
           />
         </LineChart>
       </ResponsiveContainer>

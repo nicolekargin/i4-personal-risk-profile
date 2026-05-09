@@ -6,7 +6,7 @@
 const { useState } = React;
 const {
   LineChart, Line, XAxis, YAxis, Tooltip, ReferenceLine,
-  ResponsiveContainer, ReferenceArea, CartesianGrid,
+  ResponsiveContainer, ReferenceArea, CartesianGrid, ReferenceDot,
 } = Recharts;
 
 // ============================================================

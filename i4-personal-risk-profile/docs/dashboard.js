@@ -191,7 +191,7 @@ const PERSONAL_FINDINGS = [
     direction: "up",
     timepoint: "R+45",
     cohortStatus: "Other crew: stable",
-    takeaway: "IL-12p40 elevated 4.6-fold in C003 specifically at 45 days post-flight, while the rest of the crew remained stable.",
+    takeaway: "IL-12p40 elevated 4.6-fold in C003 specifically at 45 days post-flight, while the rest of the crew remained stable. IL-12p40 is a subunit of both IL-12 and IL-23, cytokines that promote Th1 and Th17 differentiation respectively — an observation that adds complexity to the overall type-2 phenotype and may represent a concurrent regulatory or compensatory signal.",
   },
   {
     measurement: "I-309",
@@ -277,7 +277,11 @@ const CONTRADICTED_FINDINGS = [
   },
 ];
 
-const MISSED_BY_STANDARD_TESTS = [
+// Basophils removed: z_score_robust=NaN for all % rows (baseline % values too uniform for MAD).
+// This finding does not survive the both-methods robustness test required by PIPELINE.md.
+
+// CBC markers that fall within clinical range but deviate sharply from personal baseline
+const MISSED_CBC = [
   {
     measurement: "White Blood Cell Count",
     personalDeviation: "10.2 SD below baseline",
@@ -290,21 +294,44 @@ const MISSED_BY_STANDARD_TESTS = [
     clinicalRange: "Within reference",
     timepoint: "R+194",
   },
-  // Basophils removed: z_score_robust=NaN for all % rows (baseline % values too uniform for MAD).
-  // This finding does not survive the both-methods robustness test required by PIPELINE.md.
   {
     measurement: "Red Blood Cell Count",
     personalDeviation: "6.8 SD above baseline",
     clinicalRange: "Within reference (contradicts expected direction)",
     timepoint: "R+45",
   },
+];
+
+// Cytokines with no clinical reference ranges — invisible to standard medicine by definition
+// Source: personal_profile_C003.csv, crew_id=C003
+const MISSED_CYTOKINE = [
   {
-    measurement: "All 71 cytokines (IL-6, IL-4, TARC…)",
-    personalDeviation: "Strongest: IL-6 +31 SD, I-309 +12 SD, IL-4 +15 SD (robust z)",
-    clinicalRange: "No clinical reference ranges exist for any cytokine",
-    timepoint: "Multiple",
+    measurement: "IL-6",
+    personalDeviation: "+31.5 SD (mean+SD) · 2.9× fold",
+    clinicalRange: "No standard clinical range",
+    timepoint: "R+1",
+  },
+  {
+    measurement: "I-309",
+    personalDeviation: "+41.0 SD (robust z) · +12.5 SD (mean+SD) · 8.3× fold",
+    clinicalRange: "No standard clinical range",
+    timepoint: "R+194",
+  },
+  {
+    measurement: "IL-4",
+    personalDeviation: "+5.5 SD above baseline · 5.2× fold",
+    clinicalRange: "No standard clinical range",
+    timepoint: "R+194",
+  },
+  {
+    measurement: "IL-13",
+    personalDeviation: "+4.4 SD above baseline · 8.0× fold",
+    clinicalRange: "No standard clinical range",
+    timepoint: "R+1",
   },
 ];
+
+const MISSED_BY_STANDARD_TESTS = [...MISSED_CBC, ...MISSED_CYTOKINE];
 
 const METHODOLOGY_SUMMARY = `Personal baselines computed from each individual's three pre-flight measurements (L-92, L-44, L-3 days before launch).
 Bootstrap 95% confidence intervals (1000 resamples) on every z-score to honestly represent uncertainty given small baseline samples.
@@ -1001,6 +1028,12 @@ function StoryPanelMissedByStandard() {
         </p>
       </div>
 
+      {/* Table 1: CBC markers — clinically normal, personally extreme */}
+      <div className="mb-3">
+        <span className="font-mono text-xs tracking-wider uppercase" style={{ color: '#ffb000' }}>
+          Clinically normal, personally extreme
+        </span>
+      </div>
       <div className="rounded-lg border border-gray-800 overflow-hidden mb-8" style={{ background: '#0f1424' }}>
         <div className="overflow-x-auto">
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -1018,15 +1051,62 @@ function StoryPanelMissedByStandard() {
               </tr>
             </thead>
             <tbody>
-              {MISSED_BY_STANDARD_TESTS.map((row, i) => (
+              {MISSED_CBC.map((row, i) => (
                 <tr
                   key={row.measurement}
-                  style={{ borderBottom: i < MISSED_BY_STANDARD_TESTS.length - 1 ? '1px solid #1f2937' : 'none' }}
+                  style={{ borderBottom: i < MISSED_CBC.length - 1 ? '1px solid #1f2937' : 'none' }}
                 >
                   <td className="px-6 py-4 font-display font-medium text-sm" style={{ color: '#e8eaed' }}>
                     {row.measurement}
                   </td>
                   <td className="px-6 py-4 font-mono text-sm" style={{ color: '#ffb000' }}>
+                    {row.personalDeviation}
+                  </td>
+                  <td className="px-6 py-4 text-sm" style={{ color: '#9ca3af' }}>
+                    {row.clinicalRange}
+                  </td>
+                  <td className="px-6 py-4 font-mono text-xs" style={{ color: '#6b7280' }}>
+                    {row.timepoint}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Table 2: Cytokines — no clinical reference exists */}
+      <div className="mb-3">
+        <span className="font-mono text-xs tracking-wider uppercase" style={{ color: '#a78bfa' }}>
+          No clinical reference exists
+        </span>
+      </div>
+      <div className="rounded-lg border border-gray-800 overflow-hidden mb-8" style={{ background: '#0f1424' }}>
+        <div className="overflow-x-auto">
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid #1f2937' }}>
+                {['Measurement', 'Personal Deviation', 'Clinical Reference Status', 'Timepoint'].map(h => (
+                  <th
+                    key={h}
+                    className="text-left px-6 py-3 font-mono text-xs tracking-wider uppercase"
+                    style={{ color: '#6b7280' }}
+                  >
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {MISSED_CYTOKINE.map((row, i) => (
+                <tr
+                  key={row.measurement}
+                  style={{ borderBottom: i < MISSED_CYTOKINE.length - 1 ? '1px solid #1f2937' : 'none' }}
+                >
+                  <td className="px-6 py-4 font-display font-medium text-sm" style={{ color: '#e8eaed' }}>
+                    {row.measurement}
+                  </td>
+                  <td className="px-6 py-4 font-mono text-sm" style={{ color: '#a78bfa' }}>
                     {row.personalDeviation}
                   </td>
                   <td className="px-6 py-4 text-sm" style={{ color: '#9ca3af' }}>
@@ -1090,8 +1170,11 @@ function MethodologyFooter() {
 
           <div>
             <h3 className="font-display font-semibold mb-4" style={{ color: '#e8eaed' }}>Credits</h3>
-            <p className="text-sm leading-relaxed mb-4" style={{ color: '#9ca3af' }}>
+            <p className="text-sm leading-relaxed mb-2" style={{ color: '#9ca3af' }}>
               {PROJECT_META.team}
+            </p>
+            <p className="font-mono text-xs mb-4" style={{ color: '#6b7280' }}>
+              Health Orbit was built for Track 2: Individualized Risk Profile
             </p>
             <a
               href={PROJECT_META.repoUrl}
